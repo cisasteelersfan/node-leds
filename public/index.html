@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>LED Controller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <input type="range" id="inputSlider_r" min="0" max="100" value="50"
+    step="1" oninput="showValue(this)" />
+
+    <br><br><span id="outputText_r">50</span><br><br>
+    <input type="range" id="inputSlider_g" min="0" max="100" value="50"
+    step="1" oninput="showValue(this)" />
+
+    <br><br><span id="outputText_g">50</span><br><br>
+     <input type="range" id="inputSlider_b" min="0" max="100" value="50"
+    step="1" oninput="showValue(this)" />
+
+    <br><br><span id="outputText_b">50</span><br><br>
+
+    <script type="text/javascript">
+      var socket = io.connect();
+
+      var rgb = {red: 0, green: 0, blue: 0};
+      socket.on('led', function(data) {
+        document.getElementById("inputSlider_r").value = data.red;
+        document.getElementById("outputText_r").innerHTML = data.red;
+        document.getElementById("inputSlider_g").value = data.green;
+        document.getElementById("outputText_g").innerHTML = data.green;
+        document.getElementById("inputSlider_b").value = data.blue;
+        document.getElementById("outputText_b").innerHTML = data.blue;
+        rgb.red = data.red;
+        rgb.green = data.green;
+        rgb.blue = data.blue;
+        document.body.style.background =
+          "rgb("+Math.floor((rgb.red)*2.55)+","+Math.floor((rgb.green)*2.55)+","+Math.floor((rgb.blue)*2.55)+")";
+
+          console.log('hey');
+
+      });
+
+      function showValue(inputelement)
+      {
+        if(inputelement.id == "inputSlider_r"){
+          rgb.red = inputelement.value;
+        }
+        else if(inputelement.id == "inputSlider_g"){
+          rgb.green = inputelement.value;
+        }
+        else{ rgb.blue = inputelement.value;
+        }
+        socket.emit('led', rgb);
+              }
+    </script>
+  </body>
+</html>
