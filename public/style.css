@@ -1,96 +1,100 @@
 body {
-	text-align: center;
-	margin-top: 50px;
-	background: #50D020;
+    margin-top: 50px;
+    background: #ecf0f1;
 }
 
 input[type=range] {
-    /*removes default webkit styles*/
-    -webkit-appearance: none;
-    
-    /*fix for FF unable to apply focus style bug */
-    border: 1px solid white;
-    
-    /*required for proper track sizing in FF*/
-    width: 300px;
-}
-input[type=range]::-webkit-slider-runnable-track {
-    width: 300px;
-    height: 5px;
-    background: #ddd;
-    border: none;
-    border-radius: 3px;
-}
-input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    border: none;
-    height: 32px;
-    width: 32px;
-    border-radius: 50%;
-    background: goldenrod;
-    margin-top: -12px;
+  -webkit-appearance: none;
+  width: 300px;
+  margin: 6.35px 0;
 }
 input[type=range]:focus {
-    outline: none;
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 27.3px;
+  cursor: pointer;
+  box-shadow: 1.8px 1.8px 8.4px #000000, 0px 0px 1.8px #0d0d0d;
+  background: rgba(0, 0, 0, 0.36);
+  border-radius: 3.5px;
+  border: 1.6px solid #000000;
+}
+#inputSlider_r {
+    background: #ffb3b3;
+}
+#inputSlider_g {
+    background: #b3ffb3;
+}
+#inputSlider_b {
+    background: #99ccff;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1.2px 1.2px 1px #000000, 0px 0px 1.2px #0d0d0d;
+  border: 0px solid #000000;
+  height: 40px;
+  width: 60px;
+  border-radius: 8px;
+  background: #ffffff; 
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -6.35px;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
-    background: #ccc;
+  background: rgba(128, 128, 128, 0.36);
 }
-
 input[type=range]::-moz-range-track {
-    width: 300px;
-    height: 5px;
-    background: #ddd;
-    border: none;
-    border-radius: 3px;
+  width: 100%;
+  height: 27.3px;
+  cursor: pointer;
+  box-shadow: 1.8px 1.8px 8.4px #000000, 0px 0px 1.8px #0d0d0d;
+  background: rgba(0, 0, 0, 0.36);
+  border-radius: 3.5px;
+  border: 1.6px solid #000000;
 }
 input[type=range]::-moz-range-thumb {
-    border: none;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background: goldenrod;
+  box-shadow: 1.2px 1.2px 1px #000000, 0px 0px 1.2px #0d0d0d;
+  border: 0px solid #000000;
+  height: 40px;
+  width: 60px;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
 }
-
-/*hide the outline behind the border*/
-input[type=range]:-moz-focusring{
-    outline: 1px solid white;
-    outline-offset: -1px;
-}
-
 input[type=range]::-ms-track {
-    width: 300px;
-    height: 5px;
-    
-    /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
-    background: transparent;
-    
-    /*leave room for the larger thumb to overflow with a transparent border */
-    border-color: transparent;
-    border-width: 6px 0;
-
-    /*remove default tick marks*/
-    color: transparent;
+  width: 100%;
+  height: 27.3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
 }
 input[type=range]::-ms-fill-lower {
-    background: #777;
-    border-radius: 10px;
+  background: rgba(0, 0, 0, 0.36);
+  border: 0px solid #000000;
+  border-radius: 25.2px;
+  box-shadow: 1.8px 1.8px 8.4px #000000, 0px 0px 1.8px #0d0d0d;
 }
 input[type=range]::-ms-fill-upper {
-    background: #ddd;
-    border-radius: 10px;
+  background: rgba(0, 0, 0, 0.36);
+  border: 0px solid #000000;
+  border-radius: 25.2px;
+  box-shadow: 1.8px 1.8px 8.4px #000000, 0px 0px 1.8px #0d0d0d;
 }
 input[type=range]::-ms-thumb {
-    border: none;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background: goldenrod;
+  box-shadow: 1.2px 1.2px 1px #000000, 0px 0px 1.2px #0d0d0d;
+  border: 0px solid #000000;
+  height: 40px;
+  width: 60px;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 27.3px;
 }
 input[type=range]:focus::-ms-fill-lower {
-    background: #888;
+  background: rgba(0, 0, 0, 0.36);
 }
 input[type=range]:focus::-ms-fill-upper {
-    background: #ccc;
+  background: rgba(128, 128, 128, 0.36);
 }
 
