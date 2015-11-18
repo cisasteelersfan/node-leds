@@ -24,10 +24,19 @@
           step="1" oninput="showValue(this)" />
           <br><br>
 
-          <div class="btn btn-primary" onclick="nadeem()">
-                  Nadeem
-          </div>
-          <div class="btn btn-primary" onclick="something()">
+          <div class="btn-group">
+            <div class="btn btn-primary" id="nadeem" onclick="button(this)">
+              Nadeem
+            </div>
+            <div class="btn btn-primary" id="manual" onclick="button(this)">
+              Manual
+            </div>
+            <div class="btn btn-primary" id="flash" onclick="button(this)">
+              Flash
+            </div>
+            <div class="btn btn-primary" id="fade3" onclick="button(this)">
+              Fade3
+            </div>
           </div>
         </div>
       </div>

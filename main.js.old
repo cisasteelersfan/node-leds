@@ -6,7 +6,6 @@ app = express();
 server = require('http').createServer(app);
 io = require('socket.io').listen(server); //web socket server
 piblaster = require("pi-blaster.js");
-child_process = require('child_process');
 
 server.listen(8080); //start the webserver on port 8080
 //tell server that ./public/ contains the static webpages
@@ -22,56 +21,13 @@ const greenpin = 17;
 const bluepin = 22;
 
 //Global variables
-var brightness = {"r": 0, g: 0, b: 0};
+var brightness = {"r": 0, "g": 0, "b": 0};
 var br = 0;
 var bg = 0;
 var bb = 0;
 var mode = manual; // manual mode
 var upcolor = 'r';
 var downcolor = 'b';
-
-child_process.execFile('switchfast', ['sw2', 'on'], function(error, stdout, stderr){
-    console.log(error);
-    console.log(stdout);
-    console.log(stderr);
-    console.log('turned off sw2');
-});
-
-function Brightness()
-{
-    this.r = 0;
-    this.g = 0;
-    this.b = 0;
-    var values = {r: 0, g: 0, b: 0};
-    this.up = function(color){
-        this.values.color++;
-    }
-
-    this.rup = function() {
-        return this.r++;
-    }
-    this.gup = function() {
-        return this.g++;
-    }
-    this.bup = function() {
-        return this.b++;
-    }
-}
-
-var brite = new Brightness();
-brite.rup();
-console.log(brite);
-
-function up(color)
-{
-    /* Returns the current brightness and increments brightness by 1.
-     */
-    console.log(brightness);
-    if(brightness.color == 100)
-        return 100;
-    brightness.color++;
-    return brightness.color++;
-}
 
 function scale(input){
     /* approximates linear perceived brightness from 0-100
@@ -182,7 +138,7 @@ function fade3Func(){
 //setInterval(function() {mode = 2-mode;}, 1000);
 setInterval(scheduler, 100);
 
-//console.log(intensity);
+console.log(intensity);
 
 console.log('running');
 io.sockets.on('connection', function(socket){ //gets called on connect
