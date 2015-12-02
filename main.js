@@ -30,12 +30,42 @@ var mode = manual; // manual mode
 var upcolor = 'r';
 var downcolor = 'b';
 
-child_process.execFile('switchfast', ['sw2', 'on'], function(error, stdout, stderr){
-    console.log(error);
-    console.log(stdout);
-    console.log(stderr);
-    console.log('turned off sw2');
-});
+function sw1(onoff)
+{
+    if(onoff == "on")
+        child_process.execFile('switchfast', ['sw1', 'on'], function(error, stdout, stderr){
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+            console.log('turned on sw1');
+        });
+    else 
+        child_process.execFile('switchfast', ['sw1', 'off'], function(error, stdout, stderr){
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+            console.log('turned off sw1');
+        });
+}
+
+function sw2(onoff)
+{
+    if(onoff == "on")
+        child_process.execFile('switchfast', ['sw2', 'on'], function(error, stdout, stderr){
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+            console.log('turned on sw2');
+        });
+    else 
+        child_process.execFile('switchfast', ['sw2', 'off'], function(error, stdout, stderr){
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+            console.log('turned off sw2');
+        });
+}
+
 
 function Brightness()
 {
@@ -207,6 +237,11 @@ io.sockets.on('connection', function(socket){ //gets called on connect
       if(data == "manual") mode = manual;
       if(data == "flash") mode = flash;
       if(data == "fade3") mode = fade3;
+      if(data == "sw1on") sw1("on");
+      if(data == "sw1off") sw1("off");
+      if(data == "sw2on") sw2("on");
+      if(data == "sw2off") sw2("off");
+
       console.log("mode = ", mode);
   });
 /*  socket.on('button', function(data) {
