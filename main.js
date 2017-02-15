@@ -66,6 +66,24 @@ function sw2(onoff)
         });
 }
 
+function sw3(onoff)
+{
+    if(onoff == "on")
+        child_process.execFile('switchfast', ['sw3', 'on'], function(error, stdout, stderr){
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+            console.log('turned on sw3');
+        });
+    else 
+        child_process.execFile('switchfast', ['sw3', 'off'], function(error, stdout, stderr){
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+            console.log('turned off sw3');
+        });
+}
+
 
 function Brightness()
 {
@@ -241,6 +259,8 @@ io.sockets.on('connection', function(socket){ //gets called on connect
       if(data == "sw1off") sw1("off");
       if(data == "sw2on") sw2("on");
       if(data == "sw2off") sw2("off");
+      if(data == "sw3on") sw3("on");
+      if(data == "sw3off") sw3("off");
 
       console.log("mode = ", mode);
   });
