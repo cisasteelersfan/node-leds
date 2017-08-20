@@ -124,13 +124,16 @@ function up(color)
 function scale(input){
     /* approximates linear perceived brightness from 0-100
      */
-    if(input == 0) return 0;
-    return ((1/0.5267)/(Math.exp(((input/21)-10)*-1))*100-0.008)
+//    return input/100;
+    if(input == 100) return 0;
+    if(input == 0) return 1;
+    return 1 - ((1/0.5267)/(Math.exp(((input/21)-10)*-1))*100-0.008);
 }
 
 var intensity = new Array(101);
 for(i = 0; i< intensity.length; i++){
     intensity[i] = scale(i).toFixed(3);
+    console.log("intensity[i] = "+intensity[i]);
 }
 
 function scheduler(){
