@@ -16,9 +16,9 @@ socket.on('led', function(data) {
     rgb.red = data.red;
     rgb.green = data.green;
     rgb.blue = data.blue;
-    /*document.body.style.background =
+    document.body.style.background =
       "rgb("+Math.floor((rgb.red)*2.55)+","+Math.floor((rgb.green)*2.55)+","+Math.floor((rgb.blue)*2.55)+")";
-      */
+      
 
     console.log('hey');
 
