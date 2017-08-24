@@ -41,6 +41,23 @@ body {
     background-color: yellow;
 }
 
+.top-tile {
+    height: auto;
+    border-bottom: 1px solid black;
+    margin-bottom: 20px;
+}
+
+#main-content div div div div {
+    overflow: hidden;
+}
+
+.range {
+    position: relative;
+    float: left;
+    clear: both;
+    margin: 5px 0px 20px;
+}
+
 .switch {
   position: relative;
   display: inline-block;
