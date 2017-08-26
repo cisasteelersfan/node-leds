@@ -48,14 +48,14 @@
                     </div>
                     <div class="text-center">
                         <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-primary" id="manual">
-                                <input type="radio" name="ledbuttons" value="manual" checked id="buttonManual" onclick="buttonPressed(this)">Manual
+                            <label class="btn btn-primary active" id="manual">
+                                <input type="radio" name="ledbuttons" value="manual" checked id="buttonManual" onclick="modeSelect(this)">Manual
                             </label>
                             <label class="btn btn-primary" id="fade">
-                                <input type="radio" name="ledbuttons" value="fade" id="buttonFade" onclick="buttonPressed(this)">Fade
+                                <input type="radio" name="ledbuttons" value="fade" id="buttonFade" onclick="modeSelect(this)">Fade
                             </label>
                             <label class="btn btn-primary" id="candle">
-                                <input type="radio" name="ledbuttons" value="candle" id="buttonCandle" onclick="buttonPressed(this)">Candle
+                                <input type="radio" name="ledbuttons" value="candle" id="buttonCandle" onclick="modeSelect(this)">Candle
                             </label>
                         </div>
                     </div>
@@ -68,21 +68,21 @@
                     </div>
                     <div>
                         <label class="switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" id="outlet1" checked onclick="outletToggle(this)">
                             <span class="slider round"></span>
                         </label>
                         <h4 class="">Outlet 1</h4>
                     </div>
                     <div>
                         <label class="switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" id="outlet2" onclick="outletToggle(this)">
                             <span class="slider round"></span>
                         </label>
                         <h4 class="">Outlet 2</h4>
                     </div>
                     <div>
                         <label class="switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" id="outlet3" onclick="outletToggle(this)" checked>
                             <span class="slider round"></span>
                         </label>
                         <h4 class="">Outlet 3</h4>
