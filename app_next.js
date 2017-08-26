@@ -1,17 +1,22 @@
-// Colby rome 8-26-17
+// Colby Rome 8-26-17
 
 const express = require('express');
 const http = require('http');
 const url = require('url');
 const WebSocket = require('ws');
+const piblaster = require("pi-blaster.js");
+child_process = require('child_process');
 
 const app = express();
 app.use(express.static('public_next'));
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+const pins = {inputSliderR: 18, inputSliderG:17, inputSliderB:22};
+
 var JsonDB = require('node-json-db');
-var db = new JsonDB("testDB", true, true);
+// saveafterpush?, saveHumanReadable?
+var db = new JsonDB("LEDDatabase", false, false);
 
 function sendExistingData(ws){
     try {
@@ -90,6 +95,7 @@ wss.on('connection', function connection(ws, req){
                 var value = data['value'];
                 console.log(slider+": "+value);
                 db.push("/state/"+topic+"/"+data['slider']+"/value", value);
+                adjustBrightness(slider, value);
                 break;
             case 'modeSelect':
                 console.log(data);
@@ -97,10 +103,35 @@ wss.on('connection', function connection(ws, req){
                 break;
         }
     });
-
-    ws.send(JSON.stringify('something'));
 });
+
+var intensity = new Array(101);
+for(i = 0; i< intensity.length; i++){
+    intensity[i] = scale(i).toFixed(3);
+}
+function scale(input){
+    /* approximates linear perceived brightness from 0-100
+     */
+//    return input/100;
+    if(input == 100) return 0;
+    if(input == 0) return 1;
+    return 1 - ((1/0.5267)/(Math.exp(((input/21)-10)*-1))*100-0.008);
+}
+
+function adjustBrightness(slider, value){
+    var brightnessData = db.getData("/state/changeBrightness/"+slider+"/value");
+    console.log(pins[slider]+" "+intensity[value]);
+    piblaster.setPwm(pins[slider], intensity[value]);
+}
 
 server.listen(8080, function listening(){
     console.log('Listening on %d', server.address().port);
 });
+
+setInterval(function(){
+    try{
+        db.save();
+    } catch(error){
+        console.log("Couldn't save db yet");
+    }
+}, 30*60*1000); // write the database every 30 minutes
