@@ -95,7 +95,6 @@ wss.on('connection', function connection(ws, req){
                 var slider = data['slider'];
                 var value = data['value'];
                 console.log(slider+": "+value);
-                db.push("/state/"+topic+"/"+data['slider']+"/value", value);
                 adjustBrightness(slider, value);
                 break;
             case 'modeSelect':
@@ -119,6 +118,28 @@ function scale(input){
     return 1 - ((1/0.5267)/(Math.exp(((input/21)-10)*-1))*100-0.008);
 }
 
+function fade(){
+    
+}
+
+function candle(){
+
+}
+
+function scheduler(){
+    var eventType = db.getData("/state/modeSelect");
+    switch(eventType){
+        case 'fade':
+            fade();
+            break;
+        case 'candle':
+            candle();
+            break;
+        default: // do nothing (manual mode)
+            break;
+    }
+}
+
 function toggleOutlet(outlet){
     var outletData = db.getData("/state/outletToggle/"+outlet+"/checked");
     console.log(outlet+": "+outletData);
@@ -129,17 +150,19 @@ function toggleOutlet(outlet){
     );
 }
 
-function adjustBrightness(slider){
-    var brightnessData = db.getData("/state/changeBrightness/"+slider+"/value");
-    console.log(pins[slider]+" "+intensity[brightnessData]);
-    piblaster.setPwm(pins[slider], intensity[brightnessData]);
+function adjustBrightness(slider, value){
+    db.push("/state/changeBrightness/"+slider+"/value", value);
+    console.log(pins[slider]+" "+intensity[value]);
+    piblaster.setPwm(pins[slider], intensity[value]);
 }
 
 server.listen(8080, function listening(){
     console.log('Listening on %d', server.address().port);
 });
 
-setInterval(function(){
+setInterval(scheduler, 100);
+
+var saveDatabase = setInterval(function(){
     try{
         db.save();
     } catch(error){
