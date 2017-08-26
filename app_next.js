@@ -21,6 +21,12 @@ wss.on('connection', function connection(ws, req){
         var data = parsedMessage['data'];
         // console.log(data);
 
+        wss.clients.forEach(function each(client){
+            if(client !== ws && client.readyState === WebSocket.OPEN){
+                client.send(message);
+            }
+        });
+        
         switch(topic){
             case 'outletToggle':
                 var outlet = data['outlet'];
