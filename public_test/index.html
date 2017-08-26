@@ -48,14 +48,14 @@
                     </div>
                     <div class="text-center">
                         <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-primary active">
-                                <input type="radio" id="buttonManual">Manual
+                            <label class="btn btn-primary" id="manual">
+                                <input type="radio" name="ledbuttons" value="manual" checked id="buttonManual" onclick="buttonPressed(this)">Manual
                             </label>
-                            <label class="btn btn-primary">
-                                <input type="radio" id="buttonFade">Fade
+                            <label class="btn btn-primary" id="fade">
+                                <input type="radio" name="ledbuttons" value="fade" id="buttonFade" onclick="buttonPressed(this)">Fade
                             </label>
-                            <label class="btn btn-primary">
-                                <input type="radio" id="buttonCandle">Candle
+                            <label class="btn btn-primary" id="candle">
+                                <input type="radio" name="ledbuttons" value="candle" id="buttonCandle" onclick="buttonPressed(this)">Candle
                             </label>
                         </div>
                     </div>
@@ -99,3 +99,5 @@
         </div>
     </div>
 </body>
+<script src="js/client.js"></script>
+</html>
