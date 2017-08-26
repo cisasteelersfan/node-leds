@@ -58,7 +58,11 @@ body {
 
 .range {
     position: relative;
-    margin: 13px auto;
+    margin: 7px auto;
+}
+
+.btn-group {
+    margin: 10px auto;
 }
 
 .switch {
