@@ -5,7 +5,7 @@ const http = require('http');
 const url = require('url');
 const WebSocket = require('ws');
 const piblaster = require("pi-blaster.js");
-child_process = require('child_process');
+const child_process = require('child_process');
 
 const app = express();
 app.use(express.static('public_next'));
@@ -89,6 +89,7 @@ wss.on('connection', function connection(ws, req){
                 var checked = data['checked'];
                 console.log(outlet + ": " + checked);
                 db.push("/state/"+topic+"/"+data['outlet']+'/checked', checked);
+                toggleOutlet(outlet);
                 break;
             case 'changeBrightness':
                 var slider = data['slider'];
@@ -118,10 +119,20 @@ function scale(input){
     return 1 - ((1/0.5267)/(Math.exp(((input/21)-10)*-1))*100-0.008);
 }
 
-function adjustBrightness(slider, value){
+function toggleOutlet(outlet){
+    var outletData = db.getData("/state/outletToggle/"+outlet+"/checked");
+    console.log(outlet+": "+outletData);
+    var sw = {outlet1: 'sw1', outlet2: 'sw2', outlet3: 'sw3'};
+    child_process.execFile('switchfast', [sw[outlet], (outletData === true? 'on' : 'off')], function(error, stdout, stderr){
+        console.log("turned "+ (outletData === true? 'on' : 'off')+" switch " +sw[outlet]);
+    }
+    );
+}
+
+function adjustBrightness(slider){
     var brightnessData = db.getData("/state/changeBrightness/"+slider+"/value");
-    console.log(pins[slider]+" "+intensity[value]);
-    piblaster.setPwm(pins[slider], intensity[value]);
+    console.log(pins[slider]+" "+intensity[brightnessData]);
+    piblaster.setPwm(pins[slider], intensity[brightnessData]);
 }
 
 server.listen(8080, function listening(){
