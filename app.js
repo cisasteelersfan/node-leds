@@ -242,7 +242,8 @@ debuglog('running');
 io.sockets.on('connection', function(socket){ //gets called on connect
   socket.emit('led', {red: br,
                       green: bg,
-                      blue: bb});
+                      blue: bb}
+  );
 
   socket.on('led', function(data) {
     br = data.red;
