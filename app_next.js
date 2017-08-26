@@ -14,7 +14,28 @@ wss.on('connection', function connection(ws, req){
     console.log('client connected');
 
     ws.on('message', function incoming(message){
-        console.log('received: %s', message);
+        var parsedMessage = JSON.parse(message);
+        // console.log('received: %s', message);
+        var topic = parsedMessage['topic'];
+        // console.log(topic);
+        var data = parsedMessage['data'];
+        // console.log(data);
+
+        switch(topic){
+            case 'outletToggle':
+                var outlet = data['outlet'];
+                var checked = data['checked'];
+                console.log(outlet + ": " + checked);
+                break;
+            case 'changeBrightness':
+                var slider = data['slider'];
+                var value = data['value'];
+                console.log(slider+": "+value);
+                break;
+            case 'modeSelect':
+                console.log(data);
+                break;
+        }
     });
 
     ws.send(JSON.stringify('something'));
