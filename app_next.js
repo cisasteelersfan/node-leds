@@ -56,6 +56,7 @@ function sendExistingData(ws){
         ws.send(message);
     }
     var message = JSON.stringify({topic:'modeSelect',data:modeData});
+    setMode(modeData);
     console.log(message);
     ws.send(message);
 }

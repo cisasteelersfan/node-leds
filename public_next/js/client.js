@@ -36,10 +36,11 @@ function changeBrightness(ele){
 var host = window.document.location.host.replace(/:.*/, '');
 var ws;
 var connect = function(){
+    console.log('trying to connect');
     ws = new WebSocket('ws://' + host + ':8080');
     ws.onclose = function(){
         console.log('socket closed, reconnecting...');
-        setTimeout(connect, 1000*5);
+        setTimeout(connect, 1000);
     }
     ws.onmessage = function(event){
         // console.log(JSON.parse(event.data));
