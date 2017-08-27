@@ -58,6 +58,7 @@ function sendExistingData(ws){
     var message = JSON.stringify({topic:'modeSelect',data:modeData});
     console.log(message);
     ws.send(message);
+    db.save();
 }
 
 
@@ -140,6 +141,8 @@ var fade = function(){
     db.push("/state/changeBrightness/"+fadeInfo['downSlider']+"/value", newDownVal);
     db.push("/state/changeBrightness/"+fadeInfo['upSlider']+"/value", newUpVal);
 
+    piblaster.setPwm(pins[fadeInfo['upSlider']], intensity[newUpVal]);
+    piblaster.setPwm(pins[fadeInfo['downSlider']], intensity[newDownVal]);
     wss.clients.forEach(function each(client){
         if(client.readyState === WebSocket.OPEN){
             client.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':fadeInfo['upSlider'],'value':newUpVal}}));
