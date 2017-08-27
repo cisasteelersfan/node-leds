@@ -58,7 +58,6 @@ function sendExistingData(ws){
     var message = JSON.stringify({topic:'modeSelect',data:modeData});
     console.log(message);
     ws.send(message);
-    db.save();
 }
 
 
@@ -104,6 +103,10 @@ wss.on('connection', function connection(ws, req){
                 break;
         }
     });
+    ws.on('close', function(){
+        console.log("closing connection and saving database");
+        db.save();
+    })
 });
 
 var intensity = new Array(101);
