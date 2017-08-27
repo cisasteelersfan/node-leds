@@ -65,9 +65,6 @@ body {
     margin: 10px auto;
 }
 
-input[type=radio]{
-    cursor: auto;
-}
 
 .switch {
   position: relative;

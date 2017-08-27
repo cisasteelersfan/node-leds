@@ -11,10 +11,10 @@ function modeSelect(inputelement){
     for(let i of allButtons){
         i.classList.remove("active");
     }
-    document.getElementById(inputelement.value).classList.add("active");
-    console.log(inputelement.checked);
+    inputelement.classList.add("active");
+    // console.log(inputelement.checked);
 
-    ws.send(JSON.stringify({'topic':'modeSelect', 'data':inputelement.value}));
+    ws.send(JSON.stringify({'topic':'modeSelect', 'data':inputelement.id}));
 
     // client will be something like console.log(JSON.parse(e.data));
 }

@@ -47,16 +47,17 @@
                         <input class="range" type="range" id="inputSliderB" min="0" max="100" value="50" step="1" oninput="changeBrightness(this)"></input>
                     </div>
                     <div class="text-center">
-                        <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-primary active" id="manual">
-                                <input type="radio" name="ledbuttons" value="manual" checked id="buttonManual" onclick="modeSelect(this)">Manual
-                            </label>
-                            <label class="btn btn-primary" id="fade">
-                                <input type="radio" name="ledbuttons" value="fade" id="buttonFade" onclick="modeSelect(this)">Fade
-                            </label>
-                            <label class="btn btn-primary" id="candle">
-                                <input type="radio" name="ledbuttons" value="candle" id="buttonCandle" onclick="modeSelect(this)">Candle
-                            </label>
+                        <div class="btn-group">
+                            <div class="btn btn-primary" id="test" onclick="alert(this)"> test </div>
+                            <div class="btn btn-primary active" id="manual"  onclick="modeSelect(this)">
+                                Manual
+                            </div>
+                            <div class="btn btn-primary" id="fade"  onclick="modeSelect(this)">
+                                Fade
+                            </div>
+                            <div class="btn btn-primary" id="candle" onclick="modeSelect(this)">
+                                Candle
+                            </div>
                         </div>
                     </div>
                 </div>
