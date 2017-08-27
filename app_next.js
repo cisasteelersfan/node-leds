@@ -99,7 +99,7 @@ wss.on('connection', function connection(ws, req){
                 break;
             case 'modeSelect':
                 console.log(data);
-                db.push("/state/"+topic+"/", data);
+                setMode(data);
                 break;
         }
     });
@@ -109,6 +109,71 @@ var intensity = new Array(101);
 for(i = 0; i< intensity.length; i++){
     intensity[i] = scale(i).toFixed(3);
 }
+var intervalID = null;
+function intervalManager(flag, callback, time){
+    if(flag){
+        clearInterval(intervalID);
+        intervalID = setInterval(callback, time);
+    } else clearInterval(intervalID);
+}
+
+var fadeInfo = {upSlider: 'inputSliderR', downSlider: 'inputSliderG', notUsed: 'inputSliderB'};
+var fade = function(){
+    var upSliderValue = db.getData("/state/changeBrightness/"+fadeInfo['upSlider']+"/value");
+    if(upSliderValue == 100){
+        console.log("switching colors");
+        var tmp = fadeInfo['upSlider'];
+        fadeInfo['upSlider'] = fadeInfo['notUsed'];
+        fadeInfo['notUsed'] = fadeInfo['downSlider'];
+        fadeInfo['downSlider'] = tmp;
+    }
+    upSliderValue = db.getData("/state/changeBrightness/"+fadeInfo['upSlider']+"/value");
+    var downSliderValue = db.getData("/state/changeBrightness/"+fadeInfo['downSlider']+"/value");
+
+    var newUpVal = Math.min(upSliderValue+1, 100);
+    var newDownVal = Math.max(downSliderValue-1, 0);
+    db.push("/state/changeBrightness/"+fadeInfo['downSlider']+"/value", newDownVal);
+    db.push("/state/changeBrightness/"+fadeInfo['upSlider']+"/value", newUpVal);
+
+    wss.clients.forEach(function each(client){
+        if(client.readyState === WebSocket.OPEN){
+            client.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':fadeInfo['upSlider'],'value':newUpVal}}));
+            client.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':fadeInfo['downSlider'],'value':newDownVal}}));
+        }
+    });
+}
+
+var candle = function(){
+    for(var val in fadeInfo){
+        var sliderVal = db.getData("/state/changeBrightness/"+fadeInfo[val]+"/value");
+        var newSliderVal = +Math.ceil((Math.random()-0.5)*10) + +sliderVal;
+        console.log(newSliderVal);
+        if(newSliderVal < 0 || newSliderVal > 100) continue;
+
+        piblaster.setPwm(pins[fadeInfo[val]], intensity[newSliderVal]);
+        wss.clients.forEach(function each(client){
+            if(client.readyState === WebSocket.OPEN){
+                client.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':fadeInfo[val],'value':newSliderVal}}));
+            }
+        });
+    }
+}
+
+function setMode(data){
+    db.push("/state/modeSelect/", data);
+    switch(data){
+        case 'fade':
+            intervalManager(true, fade, 100);
+            break;
+        case 'candle':
+            intervalManager(true, candle, 500);
+            break;
+        default:
+            intervalManager(false);
+            break; // manual: do nothing
+    }
+}
+
 function scale(input){
     /* approximates linear perceived brightness from 0-100
      */
@@ -116,28 +181,6 @@ function scale(input){
     if(input == 100) return 0;
     if(input == 0) return 1;
     return 1 - ((1/0.5267)/(Math.exp(((input/21)-10)*-1))*100-0.008);
-}
-
-function fade(){
-    
-}
-
-function candle(){
-
-}
-
-function scheduler(){
-    var eventType = db.getData("/state/modeSelect");
-    switch(eventType){
-        case 'fade':
-            fade();
-            break;
-        case 'candle':
-            candle();
-            break;
-        default: // do nothing (manual mode)
-            break;
-    }
 }
 
 function toggleOutlet(outlet){
@@ -159,8 +202,6 @@ function adjustBrightness(slider, value){
 server.listen(8080, function listening(){
     console.log('Listening on %d', server.address().port);
 });
-
-setInterval(scheduler, 100);
 
 var saveDatabase = setInterval(function(){
     try{
