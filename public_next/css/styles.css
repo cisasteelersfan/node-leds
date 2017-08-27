@@ -65,6 +65,10 @@ body {
     margin: 10px auto;
 }
 
+input[type=radio]{
+    cursor: pointer;
+}
+
 .switch {
   position: relative;
   display: inline-block;
