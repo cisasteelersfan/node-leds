@@ -14,7 +14,6 @@ function modeSelect(inputelement){
         }
     }
     inputelement.classList.add("active");
-    console.log(inputelement.checked);
 
     ws.send(JSON.stringify({'topic':'modeSelect', 'data':inputelement.id}));
 
