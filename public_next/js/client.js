@@ -3,16 +3,18 @@ function foo(){
 }
 
 function modeSelect(inputelement){
-    //alert("Button pressed: "+inputelement.id);
+    // alert("Button pressed: "+inputelement.id);
     // document.getElementById("manual").classList.toggle("active");
     // alert("checked");
     console.log(inputelement);
     var allButtons = document.getElementsByClassName("btn");
-    for(let i of allButtons){
-        i.classList.remove("active");
+    if(allButtons){
+        for(var i=0; i<allButtons.length; i++){
+            allButtons[i].classList.remove("active");
+        }
     }
     inputelement.classList.add("active");
-    // console.log(inputelement.checked);
+    console.log(inputelement.checked);
 
     ws.send(JSON.stringify({'topic':'modeSelect', 'data':inputelement.id}));
 
@@ -61,8 +63,10 @@ ws.onmessage = function(event){
         case 'modeSelect':
             console.log(data);
             var allButtons = document.getElementsByClassName("btn");
-            for(let i of allButtons){
-                i.classList.remove("active");
+            if(allButtons){
+                for(var i=0; i<allButtons.length; i++){
+                    allButtons[i].classList.remove("active");
+                }
             }
             document.getElementById(data).classList.add("active");
             break;
