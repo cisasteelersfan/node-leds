@@ -117,6 +117,11 @@ function intervalManager(flag, callback, time){
     } else clearInterval(intervalID);
 }
 
+for(var val in fadeInfo){
+    var sliderVal = db.getData("/state/changeBrightness/"+fadeInfo[val]+"/value");
+    piblaster.setPwm(pins[fadeInfo[val]], intensity[sliderVal]);
+}
+
 var fadeInfo = {upSlider: 'inputSliderR', downSlider: 'inputSliderG', notUsed: 'inputSliderB'};
 var fade = function(){
     var upSliderValue = db.getData("/state/changeBrightness/"+fadeInfo['upSlider']+"/value");
@@ -146,7 +151,8 @@ var fade = function(){
 var candle = function(){
     for(var val in fadeInfo){
         var sliderVal = db.getData("/state/changeBrightness/"+fadeInfo[val]+"/value");
-        var newSliderVal = +Math.ceil((Math.random()-0.5)*10) + +sliderVal;
+        if(sliderVal === 0) continue;
+        var newSliderVal = +Math.ceil((Math.random()-0.5)*5) + +sliderVal;
         console.log(newSliderVal);
         if(newSliderVal < 0 || newSliderVal > 100) continue;
 
@@ -166,7 +172,7 @@ function setMode(data){
             intervalManager(true, fade, 100);
             break;
         case 'candle':
-            intervalManager(true, candle, 500);
+            intervalManager(true, candle, 200);
             break;
         default:
             intervalManager(false);
