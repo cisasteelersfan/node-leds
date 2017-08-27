@@ -160,11 +160,6 @@ var candle = function(){
         if(newSliderVal < 0 || newSliderVal > 100) continue;
 
         piblaster.setPwm(pins[fadeInfo[val]], intensity[newSliderVal]);
-        wss.clients.forEach(function each(client){
-            if(client.readyState === WebSocket.OPEN){
-                client.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':fadeInfo[val],'value':newSliderVal}}));
-            }
-        });
     }
 }
 
