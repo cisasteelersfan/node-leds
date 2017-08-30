@@ -25,8 +25,14 @@ function outletToggle(ele){
 
 function changeBrightness(ele){
     console.log(ele.id+" :"+ele.value);
-
+    changeBackgroundColor();
     ws.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':ele.id,'value':ele.value}}));
+}
+
+function changeBackgroundColor(){
+    var rgba = (100+Number(document.getElementById("inputSliderR").value)).toString() + "," + (100+Number(document.getElementById("inputSliderG").value)).toString() + "," + (100+Number(document.getElementById("inputSliderB").value)).toString();
+    console.log(rgba);
+    document.body.style.background = "linear-gradient(to right, rgba(0,0,0,0.05), rgba(" + rgba + ",.5), rgba(0,0,0,0.05))";
 }
 
 function setLogosVisible(visibility){
@@ -75,6 +81,7 @@ var connect = function(){
                 var value = data['value'];
                 console.log(slider+": "+value);
                 document.getElementById(slider).value = value;
+                changeBackgroundColor();
                 break;
             case 'modeSelect':
                 console.log(data);
