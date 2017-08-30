@@ -1,7 +1,3 @@
-function foo(){
-    alert("IT WORKS");
-}
-
 function modeSelect(inputelement){
     // alert("Button pressed: "+inputelement.id);
     // document.getElementById("manual").classList.toggle("active");
@@ -33,12 +29,27 @@ function changeBrightness(ele){
     ws.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':ele.id,'value':ele.value}}));
 }
 
+function setLogosVisible(visibility){
+    var logos = document.getElementsByClassName("logo");
+    for(var i=0; i<logos.length; i++){
+        logos[i].style.visibility = visibility? "visible" : "hidden";
+    }
+}
+
 var host = window.document.location.host.replace(/:.*/, '');
 var ws;
 var connect = function(){
     console.log('trying to connect');
     ws = new WebSocket('ws://' + host + ':8080');
+    ws.onopen = function(){
+        setLogosVisible(true);
+    }
+    ws.onerror = function(event){
+        setLogosVisible(false);
+        console.log("Couldn't connect.");
+    }
     ws.onclose = function(){
+        setLogosVisible(false);
         console.log('socket closed, reconnecting...');
         setTimeout(connect, 1000);
     }
