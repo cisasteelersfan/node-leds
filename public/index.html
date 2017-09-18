@@ -1,73 +1,103 @@
-<html>
-  <head>
-    <title>LED Controller</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Colby's LED Controller</title>
+    <link rel="icon" href="favicon.ico" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
 
-    <script src="socket.io/socket.io.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-offset-4 col-sm-4">
+<body>
+    <header>
+        <nav id="header-nav" class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="index.html" class="pull-left visible-md visible-lg">
+                        <div id="logo-img" class="logo"></div>
+                    </a>
+                    <div class="navbar-brand">
+                        <h1>LED Controller Page</h1>
+                    </div>
+                    <a href="index.html">
+                        <div id="logo-img-mob" class="logo"></div>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-          <input type="range" id="inputSlider_r" min="0" max="100" value="50"
-          step="1" oninput="showValue(this)" />
-          <br><br>
-
-          <input type="range" id="inputSlider_g" min="0" max="100" value="50"
-          step="1" oninput="showValue(this)" />
-          <br><br>
-
-          <input type="range" id="inputSlider_b" min="0" max="100" value="50"
-          step="1" oninput="showValue(this)" />
-          <br><br>
-
-          <div class="form-group">
-            <div class="btn btn-primary" id="nadeem" onclick="button(this)">
-              Nadeem
+    <div id="main-content" class="container">
+        <div id="home-tiles" class="row">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="tile">
+                    <div class="top-tile">
+                        <h3 class="text-center">RGB Sliders</h3>
+                    </div>
+                    <div>
+                        <input class="range" type="range" id="inputSliderR" min="0" max="100" value="50" step="1" oninput="changeBrightness(this)"></input>
+                    </div>
+                    <div>
+                        <input class="range" type="range" id="inputSliderG" min="0" max="100" value="50" step="1" oninput="changeBrightness(this)"></input>
+                    </div>
+                    <div>
+                        <input class="range" type="range" id="inputSliderB" min="0" max="100" value="50" step="1" oninput="changeBrightness(this)"></input>
+                    </div>
+                    <div class="text-center">
+                        <div class="btn-group">
+                            <div class="btn btn-primary active" id="manual"  onclick="modeSelect(this)">
+                                Manual
+                            </div>
+                            <div class="btn btn-primary" id="fade"  onclick="modeSelect(this)">
+                                Fade
+                            </div>
+                            <div class="btn btn-primary" id="candle" onclick="modeSelect(this)">
+                                Candle
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="btn btn-primary" id="manual" onclick="button(this)">
-              Manual
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="tile">
+                    <div class="top-tile">
+                        <h3 class="text-center">Outlet Control</h3>
+                    </div>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" id="outlet1" checked onclick="outletToggle(this)">
+                            <span class="slider round"></span>
+                        </label>
+                        <h4 class="">Outlet 1</h4>
+                    </div>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" id="outlet2" onclick="outletToggle(this)">
+                            <span class="slider round"></span>
+                        </label>
+                        <h4 class="">Outlet 2</h4>
+                    </div>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" id="outlet3" onclick="outletToggle(this)" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <h4 class="">Outlet 3</h4>
+                    </div>
+                </div>
             </div>
-            <div class="btn btn-primary" id="flash" onclick="button(this)">
-              Flash
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="tile">
+                    <div class="top-tile">
+                        <h3 class="text-center">Alarm - TODO</h3>
+                    </div>
+                </div>
             </div>
-            <div class="btn btn-primary" id="fade3" onclick="button(this)">
-              Fade3
-            </div>
-          </div>
-          <br><br>
-          <div class="btn-group">
-            <div class="btn btn-primary" id="sw1on" onclick="button(this)">
-              Sw1 On
-            </div>
-            <div class="btn btn-primary" id="sw1off" onclick="button(this)">
-              Sw1 Off
-            </div>
-          </div>
-          <div class="btn-group">
-            <div class="btn btn-primary" id="sw2on" onclick="button(this)">
-              Sw2 On
-            </div>
-            <div class="btn btn-primary" id="sw2off" onclick="button(this)">
-              Sw2 Off
-            </div>
-          </div>
-          <div class="btn-group">
-            <div class="btn btn-primary" id="sw3on" onclick="button(this)">
-              Sw3 On
-            </div>
-            <div class="btn btn-primary" id="sw3off" onclick="button(this)">
-              Sw3 Off
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-    <script src="client.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"> </script>
-
-  </body>
+</body>
+<script src="js/client.js"></script>
 </html>
