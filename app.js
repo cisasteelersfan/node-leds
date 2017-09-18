@@ -6,9 +6,10 @@ const url = require('url');
 const WebSocket = require('ws');
 const piblaster = require("pi-blaster.js");
 const child_process = require('child_process');
+const path = require('path')
 
 const app = express();
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
@@ -16,7 +17,7 @@ const pins = {inputSliderR: 18, inputSliderG:17, inputSliderB:22};
 
 var JsonDB = require('node-json-db');
 // saveafterpush?, saveHumanReadable?
-var db = new JsonDB("LEDDatabase", false, false);
+var db = new JsonDB("./LEDDatabase", false, false);
 
 function sendExistingData(ws){
     try {
