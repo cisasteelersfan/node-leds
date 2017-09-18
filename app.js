@@ -8,7 +8,7 @@ const piblaster = require("pi-blaster.js");
 const child_process = require('child_process');
 
 const app = express();
-app.use(express.static('public_next'));
+app.use(express.static('public'));
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 

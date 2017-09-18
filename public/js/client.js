@@ -32,7 +32,7 @@ function changeBrightness(ele){
 function changeBackgroundColor(){
     var rgba = (100+Number(document.getElementById("inputSliderR").value)).toString() + "," + (100+Number(document.getElementById("inputSliderG").value)).toString() + "," + (100+Number(document.getElementById("inputSliderB").value)).toString();
     console.log(rgba);
-    document.body.style.background = "linear-gradient(to right, rgba(0,0,0,0.05), rgba(" + rgba + ",.5), rgba(0,0,0,0.05))";
+    document.getElementById('rgb sliders').style.background = "radial-gradient(rgba(0,0,0,0.05), rgba(" + rgba + ",.5), rgba(0,0,0,0.05))";
 }
 
 function setLogosVisible(visibility){
