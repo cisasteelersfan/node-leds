@@ -17,7 +17,7 @@ const pins = {inputSliderR: 18, inputSliderG:17, inputSliderB:22};
 
 var JsonDB = require('node-json-db');
 // saveafterpush?, saveHumanReadable?
-var db = new JsonDB("./LEDDatabase", false, false);
+var db = new JsonDB(path.join(__dirname, "LEDDatabase"), false, false);
 
 function sendExistingData(ws){
     try {
