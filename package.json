@@ -1,0 +1,33 @@
+{
+  "name": "node-leds",
+  "version": "1.0.0",
+  "description": "control RGB LEDs and outlets",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.1",
+    "http": "0.0.0",
+    "node-json-db": "^0.7.3",
+    "pi-blaster.js": "^0.1.1",
+    "socket.io": "^1.7.2",
+    "url": "^0.11.0",
+    "ws": "^3.2.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cisasteelersfan/node-leds.git"
+  },
+  "author": "colby rome",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cisasteelersfan/node-leds/issues"
+  },
+  "homepage": "https://github.com/cisasteelersfan/node-leds#readme"
+}

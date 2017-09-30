@@ -7,6 +7,14 @@ const WebSocket = require('ws');
 const piblaster = require("pi-blaster.js");
 const child_process = require('child_process');
 const path = require('path')
+var JsonDB = require('node-json-db');
+debugLog(process.env.NODE_ENV);
+
+function debugLog(inp){
+    if(process.env.NODE_ENV === 'development'){
+        console.log(inp);
+    }
+}
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -15,7 +23,6 @@ const wss = new WebSocket.Server({ server });
 
 const pins = {inputSliderR: 18, inputSliderG:17, inputSliderB:22};
 
-var JsonDB = require('node-json-db');
 // saveafterpush?, saveHumanReadable?
 var db = new JsonDB(path.join(__dirname, "LEDDatabase"), false, false);
 
@@ -25,7 +32,7 @@ function sendExistingData(ws){
         var brightnessData = db.getData("/state/changeBrightness");
         var modeData = db.getData("/state/modeSelect");
     } catch(error){
-        console.log("Creating initial database");
+        debugLog("Creating initial database");
         db.push("/state/outletToggle/outlet1/checked", false);
         db.push("/state/outletToggle/outlet2/checked", false);
         db.push("/state/outletToggle/outlet3/checked", false);
@@ -37,34 +44,34 @@ function sendExistingData(ws){
         var brightnessData = db.getData("/state/changeBrightness");
         var modeData = db.getData("/state/modeSelect");
     }
-    // console.log(data);
+    // debugLog(data);
     for(var outlet in outletData){
-        // console.log(outlet+": "+outletData[outlet]);
-        // console.log(outletData[outlet]);
-        // console.log(outletData[outlet]['checked']);
+        // debugLog(outlet+": "+outletData[outlet]);
+        // debugLog(outletData[outlet]);
+        // debugLog(outletData[outlet]['checked']);
 
         var checked = outletData[outlet]['checked'];
 
         var message = JSON.stringify({topic:'outletToggle',data:{'outlet':outlet, 'checked': checked }});
-        console.log(message);
+        debugLog(message);
         ws.send(message);
     }
     for(var slider in brightnessData){
         var value = brightnessData[slider]['value'];
 
         var message = JSON.stringify({topic:'changeBrightness', data:{'slider':slider, 'value':value}});
-        console.log(message);
+        debugLog(message);
         ws.send(message);
     }
     var message = JSON.stringify({topic:'modeSelect',data:modeData});
     setMode(modeData);
-    console.log(message);
+    debugLog(message);
     ws.send(message);
 }
 
 
 wss.on('connection', function connection(ws, req){
-    console.log('client connected');
+    debugLog('client connected');
 
     // send initial values of sliders, buttons, and outlets:
     sendExistingData(ws);
@@ -72,11 +79,11 @@ wss.on('connection', function connection(ws, req){
 
     ws.on('message', function incoming(message){
         var parsedMessage = JSON.parse(message);
-        // console.log('received: %s', message);
+        // debugLog('received: %s', message);
         var topic = parsedMessage['topic'];
-        // console.log(topic);
+        // debugLog(topic);
         var data = parsedMessage['data'];
-        // console.log(data);
+        // debugLog(data);
 
         // update each of the other clients with the same message
         wss.clients.forEach(function each(client){
@@ -89,24 +96,24 @@ wss.on('connection', function connection(ws, req){
             case 'outletToggle':
                 var outlet = data['outlet'];
                 var checked = data['checked'];
-                console.log(outlet + ": " + checked);
+                debugLog(outlet + ": " + checked);
                 db.push("/state/"+topic+"/"+data['outlet']+'/checked', checked);
                 toggleOutlet(outlet);
                 break;
             case 'changeBrightness':
                 var slider = data['slider'];
                 var value = data['value'];
-                console.log(slider+": "+value);
+                debugLog(slider+": "+value);
                 adjustBrightness(slider, value);
                 break;
             case 'modeSelect':
-                console.log(data);
+                debugLog(data);
                 setMode(data);
                 break;
         }
     });
     ws.on('close', function(){
-        console.log("closing connection and saving database");
+        debugLog("closing connection and saving database");
         db.save();
     })
 });
@@ -132,7 +139,7 @@ var fadeInfo = {upSlider: 'inputSliderR', downSlider: 'inputSliderG', notUsed: '
 var fade = function(){
     var upSliderValue = db.getData("/state/changeBrightness/"+fadeInfo['upSlider']+"/value");
     if(upSliderValue == 100){
-        console.log("switching colors");
+        debugLog("switching colors");
         var tmp = fadeInfo['upSlider'];
         fadeInfo['upSlider'] = fadeInfo['notUsed'];
         fadeInfo['notUsed'] = fadeInfo['downSlider'];
@@ -161,7 +168,7 @@ var candle = function(){
         var sliderVal = db.getData("/state/changeBrightness/"+fadeInfo[val]+"/value");
         if(sliderVal === 0) continue;
         var newSliderVal = +Math.ceil((Math.random()-0.5)*5) + +sliderVal;
-        console.log(newSliderVal);
+        debugLog(newSliderVal);
         if(newSliderVal < 0 || newSliderVal > 100) continue;
 
         piblaster.setPwm(pins[fadeInfo[val]], intensity[newSliderVal]);
@@ -194,28 +201,28 @@ function scale(input){
 
 function toggleOutlet(outlet){
     var outletData = db.getData("/state/outletToggle/"+outlet+"/checked");
-    console.log(outlet+": "+outletData);
+    debugLog(outlet+": "+outletData);
     var sw = {outlet1: 'sw1', outlet2: 'sw2', outlet3: 'sw3'};
     child_process.execFile('switchfast', [sw[outlet], (outletData === true? 'on' : 'off')], function(error, stdout, stderr){
-        console.log("turned "+ (outletData === true? 'on' : 'off')+" switch " +sw[outlet]);
+        debugLog("turned "+ (outletData === true? 'on' : 'off')+" switch " +sw[outlet]);
     }
     );
 }
 
 function adjustBrightness(slider, value){
     db.push("/state/changeBrightness/"+slider+"/value", value);
-    console.log(pins[slider]+" "+intensity[value]);
+    debugLog(pins[slider]+" "+intensity[value]);
     piblaster.setPwm(pins[slider], intensity[value]);
 }
 
 server.listen(8080, function listening(){
-    console.log('Listening on %d', server.address().port);
+    debugLog('Listening on ' + server.address().port);
 });
 
 var saveDatabase = setInterval(function(){
     try{
         db.save();
     } catch(error){
-        console.log("Couldn't save db yet");
+        debugLog("Couldn't save db yet");
     }
 }, 30*60*1000); // write the database every 30 minutes
