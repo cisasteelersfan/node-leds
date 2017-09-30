@@ -1,47 +1,3 @@
-function modeSelect(inputelement){
-    // alert("Button pressed: "+inputelement.id);
-    // document.getElementById("manual").classList.toggle("active");
-    // alert("checked");
-    console.log(inputelement);
-    var allButtons = document.getElementsByClassName("btn");
-    if(allButtons){
-        for(var i=0; i<allButtons.length; i++){
-            allButtons[i].classList.remove("active");
-        }
-    }
-    inputelement.classList.add("active");
-
-    ws.send(JSON.stringify({'topic':'modeSelect', 'data':inputelement.id}));
-
-    // client will be something like console.log(JSON.parse(e.data));
-}
-
-function outletToggle(ele){
-    console.log("Element.checked: "+ ele.checked);
-
-    ws.send(JSON.stringify({'topic':'outletToggle','data':{'outlet':ele.id,'checked':ele.checked}}));
-    //document.getElementById("outlet3").checked = false;
-}
-
-function changeBrightness(ele){
-    console.log(ele.id+" :"+ele.value);
-    changeBackgroundColor();
-    ws.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':ele.id,'value':ele.value}}));
-}
-
-function changeBackgroundColor(){
-    var rgba = (100+Number(document.getElementById("inputSliderR").value)).toString() + "," + (100+Number(document.getElementById("inputSliderG").value)).toString() + "," + (100+Number(document.getElementById("inputSliderB").value)).toString();
-    console.log(rgba);
-    document.getElementById('rgb sliders').style.background = "radial-gradient(rgba(0,0,0,0.05), rgba(" + rgba + ",.5), rgba(0,0,0,0.05))";
-}
-
-function setLogosVisible(visibility){
-    var logos = document.getElementsByClassName("logo");
-    for(var i=0; i<logos.length; i++){
-        logos[i].style.visibility = visibility? "visible" : "hidden";
-    }
-}
-
 var host = window.document.location.host.replace(/:.*/, '');
 var ws;
 var connect = function(){
@@ -97,3 +53,57 @@ var connect = function(){
     }
 }
 connect();
+function modeSelect(inputelement){
+    // alert("Button pressed: "+inputelement.id);
+    // document.getElementById("manual").classList.toggle("active");
+    // alert("checked");
+    console.log(inputelement);
+    var allButtons = document.getElementsByClassName("btn");
+    if(allButtons){
+        for(var i=0; i<allButtons.length; i++){
+            allButtons[i].classList.remove("active");
+        }
+    }
+    inputelement.classList.add("active");
+
+    ws.send(JSON.stringify({'topic':'modeSelect', 'data':inputelement.id}));
+
+    // client will be something like console.log(JSON.parse(e.data));
+}
+
+function outletToggle(ele){
+    console.log("Element.checked: "+ ele.checked);
+
+    ws.send(JSON.stringify({'topic':'outletToggle','data':{'outlet':ele.id,'checked':ele.checked}}));
+    //document.getElementById("outlet3").checked = false;
+}
+
+function changeBrightness(ele){
+    console.log(ele.id+" :"+ele.value);
+    changeBackgroundColor();
+    ws.send(JSON.stringify({'topic':'changeBrightness','data':{'slider':ele.id,'value':ele.value}}));
+}
+
+function changeBackgroundColor(){
+    var rgba = (100+Number(document.getElementById("inputSliderR").value)).toString() + "," + (100+Number(document.getElementById("inputSliderG").value)).toString() + "," + (100+Number(document.getElementById("inputSliderB").value)).toString();
+    console.log(rgba);
+    document.getElementById('rgb sliders').style.background = "radial-gradient(rgba(0,0,0,0.05), rgba(" + rgba + ",.5), rgba(0,0,0,0.05))";
+}
+
+function setLogosVisible(visibility){
+    var logos = document.getElementsByClassName("logo");
+    for(var i=0; i<logos.length; i++){
+        logos[i].style.visibility = visibility? "visible" : "hidden";
+    }
+}
+
+
+document.getElementById('outlet1').addEventListener('click', function(){
+    outletToggle(this);
+});
+document.getElementById('outlet2').addEventListener('click', function(){
+    outletToggle(this);
+});
+document.getElementById('outlet3').addEventListener('click', function(){
+    outletToggle(this);
+});

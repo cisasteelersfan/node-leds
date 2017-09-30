@@ -216,7 +216,7 @@ function adjustBrightness(slider, value){
 }
 
 server.listen(8080, function listening(){
-    debugLog('Listening on ' + server.address().port);
+    console.log('Listening on ' + server.address().port);
 });
 
 var saveDatabase = setInterval(function(){
